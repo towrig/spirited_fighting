@@ -898,6 +898,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "bevy_toon_shader"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6b1e620fba51a9dfbd39d1712d8ae15c3dbc0b6993f3ab0b28d78a46a54e4c86"
+dependencies = [
+ "bevy",
+]
+
+[[package]]
 name = "bevy_transform"
 version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2854,6 +2863,7 @@ name = "spirited_fighting"
 version = "0.1.0"
 dependencies = [
  "bevy",
+ "bevy_toon_shader",
 ]
 
 [[package]]
