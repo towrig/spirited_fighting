@@ -15,6 +15,9 @@
     - maybe punches can have nice flow and power?
     - dismemberment
     - can I reference bones based on the collision???
+- Multiplayer
+    - investigate library options for network communications with rust
+    - Dockerize the server (to get used to using docker)
 
 
 # List of crates and other useful things
