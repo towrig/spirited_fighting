@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy_toon_shader::{ToonShaderMainCamera, ToonShaderMaterial, ToonShaderPlugin, ToonShaderSun};
+use bevy_rapier3d::prelude::*;
 use std::f32::consts::PI;
 
 fn main() {
@@ -9,7 +9,8 @@ fn main() {
         brightness: 1.0 / 5.0f32,
     })
     .add_plugins(DefaultPlugins)
-    .add_plugins(ToonShaderPlugin)
+    .add_plugins(RapierPhysicsPlugin::<NoUserData>::default())
+    .add_plugins(RapierDebugRenderPlugin::default())
     .add_systems(Startup,  setup)
     .run();
 }
@@ -17,42 +18,47 @@ fn main() {
 fn setup(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
-    mut toon_materials: ResMut<Assets<ToonShaderMaterial>>,
+    mut materials: ResMut<Assets<StandardMaterial>>,
     asset_server: Res<AssetServer>,
 ) {
-    let toon_material = toon_materials.add(ToonShaderMaterial::default());
-    // plane
-    commands.spawn(MaterialMeshBundle {
-        mesh: meshes.add(shape::Plane::from_size(5.0).into()),
-        material: toon_material.clone(),
-        ..default()
-    });
-    // cube
-    commands.spawn(MaterialMeshBundle {
-        mesh: meshes.add(Mesh::from(shape::Cube { size: 2.0 })),
-        material: toon_material.clone(),
-        transform: Transform::from_xyz(3.0, 1.0, 0.0),
-        ..default()
-    });
+        
+    /* Create the ground. */
+    commands
+        .spawn(Collider::cuboid(100.0, 0.1, 100.0))
+        .insert(TransformBundle::from(Transform::from_xyz(0.0, -2.0, 0.0)))
+        .insert(MaterialMeshBundle {
+            mesh: meshes.add(shape::Plane::from_size(100.0).into()),
+            material: materials.add(StandardMaterial {
+                base_color: Color::ORANGE_RED,
+                perceptual_roughness: 1.0,
+                ..default()
+            }),
+            ..default()
+        });
     
-    // man
-    let colored_toon_material = toon_materials.add(ToonShaderMaterial {
-        color: Color::rgb(0.991f32, 0.6353f32, 0.5647f32),
-        ..default()
-    });
-    commands.spawn(MaterialMeshBundle {
-        mesh: asset_server.load("gltf/man_with_armature.gltf#Mesh0/Primitive0"),
-        material: colored_toon_material.clone(),
-        transform: Transform::from_xyz(0.0, 1.2, 0.0).with_rotation(Quat::from_rotation_y(-PI / 2.)).with_scale(Vec3::new(0.1, 0.1, 0.1)),
-        ..default()
-    });
+    /* Create the bouncing man. */
+    commands
+        .spawn(RigidBody::Dynamic)
+        .insert(Collider::capsule_y(10.0f32, 2.0f32))
+        .insert(Restitution::coefficient(0.7))
+        .insert(TransformBundle::from(Transform::from_xyz(0.0, 4.0, 0.0)))
+        .insert(MaterialMeshBundle {
+            mesh: asset_server.load("gltf/man_with_armature.gltf#Mesh0/Primitive0"),
+            material: materials.add(StandardMaterial {
+                base_color: Color::WHITE,
+                perceptual_roughness: 1.0,
+                ..default()
+            }),
+            transform: Transform::from_xyz(0.0, 1.2, 0.0).with_rotation(Quat::from_rotation_y(-PI / 2.)).with_scale(Vec3::new(0.1, 0.1, 0.1)),
+            ..default()
+        });
 
-    
     // Ambient light
     commands.insert_resource(AmbientLight {
         color: Color::GRAY * 0.2,
         ..default()
     });
+
     // light, but should be DirectionalLightBundle to work with toonshader...
     commands.spawn((
         DirectionalLightBundle {
@@ -68,19 +74,12 @@ fn setup(
             },
             ..default()
         },
-        ToonShaderSun,
     ));
+
     // camera
-    commands.spawn((
-        Camera3dBundle {
-            camera: Camera {
-                hdr: true,
-                ..default()
-            },
-            transform: Transform::from_xyz(0.0, 5., 10.0)
-                .looking_at(Vec3::new(0., 1., 0.), Vec3::Y),
-            ..default()
-        },
-        ToonShaderMainCamera,
-    ));
+    commands.spawn(Camera3dBundle {
+        transform: Transform::from_xyz(-3.0, 3.0, 10.0).looking_at(Vec3::ZERO, Vec3::Y),
+        ..Default::default()
+    });
+
 }
