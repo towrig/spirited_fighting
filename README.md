@@ -1,3 +1,9 @@
+# Plan of attack
+1. move camera on keypress
+2. orient camera based on mouse position
+3. inverse kinematics research
+
+
 # Ideas
 
 - Particle effects for swords:

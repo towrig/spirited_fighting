@@ -2,13 +2,16 @@ use bevy::prelude::*;
 use bevy_rapier3d::prelude::*;
 use std::f32::consts::PI;
 
+mod plugins;
+use plugins::camera::CustomCameraPlugin;
+
 fn main() {
     App::new()
     .insert_resource(AmbientLight {
         color: Color::WHITE,
         brightness: 1.0 / 5.0f32,
     })
-    .add_plugins(DefaultPlugins)
+    .add_plugins((DefaultPlugins, CustomCameraPlugin))
     .add_plugins(RapierPhysicsPlugin::<NoUserData>::default())
     .add_plugins(RapierDebugRenderPlugin::default())
     .add_systems(Startup,  setup)
@@ -59,7 +62,7 @@ fn setup(
         ..default()
     });
 
-    // light, but should be DirectionalLightBundle to work with toonshader...
+    // Sun
     commands.spawn((
         DirectionalLightBundle {
             directional_light: DirectionalLight {
@@ -75,11 +78,5 @@ fn setup(
             ..default()
         },
     ));
-
-    // camera
-    commands.spawn(Camera3dBundle {
-        transform: Transform::from_xyz(-3.0, 3.0, 10.0).looking_at(Vec3::ZERO, Vec3::Y),
-        ..Default::default()
-    });
 
 }
