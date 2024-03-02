@@ -35,3 +35,7 @@
 - https://www.youtube.com/watch?v=xVRHYWfAJkI&ab_channel=BipedPotato - tutorial for animations and importing
 - https://roystan.net/articles/toon-shader/ - toon shaders and how they work
 - https://github.com/torsteingrindvik/bevy-vfx-bag - shader pack
+
+# Good functions:
+
+- `info!()` <- great for debugging

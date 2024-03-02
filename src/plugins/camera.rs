@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 
 pub struct CustomCameraPlugin;
+const CAMERA_SPEED: f32 = 0.1;
 
 impl Plugin for CustomCameraPlugin {
     fn build(&self, app: &mut App) {
@@ -20,7 +21,23 @@ fn add_camera(
 }
 
 fn camera_controller(
-    //query: Query<&Name, With<Person>>
+    keyboard_input: Res<Input<KeyCode>>,
+    mut query: Query<(&mut Transform, &Camera)>
 ){
-
+    for (mut camera_transform, _) in query.iter_mut() {
+        if keyboard_input.pressed(KeyCode::W) {
+            camera_transform.translation += Vec3::new(0f32, 1f32, 0f32) * CAMERA_SPEED;
+        }
+        if keyboard_input.pressed(KeyCode::S) {
+            camera_transform.translation += Vec3::new(0f32, -1f32, 0f32) * CAMERA_SPEED;
+        }
+        if keyboard_input.pressed(KeyCode::A) {
+            let direction = camera_transform.left();
+            camera_transform.translation += direction * CAMERA_SPEED;
+        }
+        if keyboard_input.pressed(KeyCode::D) {
+            let direction = camera_transform.right();
+            camera_transform.translation += direction * CAMERA_SPEED;
+        }
+    }
 }

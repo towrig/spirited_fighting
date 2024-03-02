@@ -38,7 +38,7 @@ fn setup(
             }),
             ..default()
         });
-    
+
     /* Create the bouncing man. */
     commands
         .spawn(RigidBody::Dynamic)
