@@ -1,7 +1,9 @@
 # Plan of attack
-1. move camera on keypress
-2. orient camera based on mouse position
-3. inverse kinematics research
+1. ~~move camera on keypress~~
+2. ~~orient camera based on mouse position~~
+3. implement a particle system using the compute shader
+4. inverse kinematics research
+
 
 
 # Ideas
