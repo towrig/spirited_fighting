@@ -2,7 +2,7 @@ use bevy::{input::mouse::MouseMotion, prelude::*};
 use bevy::window::{CursorGrabMode, PrimaryWindow};
 
 pub struct CustomCameraPlugin;
-const CAMERA_SPEED: f32 = 0.1;
+const CAMERA_SPEED: f32 = 2.0;
 const CAMERA_SENSITIVITY: f32 = 0.00025;
 
 impl Plugin for CustomCameraPlugin {
@@ -40,7 +40,8 @@ fn cursor_grab(
 }
 
 fn camera_controller(
-    keyboard_input: Res<Input<KeyCode>>,
+    keyboard_input: Res<ButtonInput<KeyCode>>,
+    time: Res<Time>,
     mut ev_motion: EventReader<MouseMotion>,
     mut query: Query<(&mut Transform, &Camera)>
 ){
@@ -62,21 +63,21 @@ fn camera_controller(
         camera_transform.rotation = camera_transform.rotation * pitch; // rotate around local x axis
 
         //Movement
-        if keyboard_input.pressed(KeyCode::W) {
+        if keyboard_input.pressed(KeyCode::KeyW) {
             let direction = camera_transform.forward();
-            camera_transform.translation += direction * CAMERA_SPEED;
+            camera_transform.translation += direction * CAMERA_SPEED * time.delta_seconds();
         }
-        if keyboard_input.pressed(KeyCode::S) {
+        if keyboard_input.pressed(KeyCode::KeyS) {
             let direction = camera_transform.back();
-            camera_transform.translation += direction * CAMERA_SPEED;
+            camera_transform.translation += direction * CAMERA_SPEED * time.delta_seconds();
         }
-        if keyboard_input.pressed(KeyCode::A) {
+        if keyboard_input.pressed(KeyCode::KeyA) {
             let direction = camera_transform.left();
-            camera_transform.translation += direction * CAMERA_SPEED;
+            camera_transform.translation += direction * CAMERA_SPEED * time.delta_seconds();
         }
-        if keyboard_input.pressed(KeyCode::D) {
+        if keyboard_input.pressed(KeyCode::KeyD) {
             let direction = camera_transform.right();
-            camera_transform.translation += direction * CAMERA_SPEED;
+            camera_transform.translation += direction * CAMERA_SPEED * time.delta_seconds();
         }
     }
 }

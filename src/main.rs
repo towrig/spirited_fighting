@@ -4,6 +4,7 @@ use std::f32::consts::PI;
 
 mod plugins;
 use plugins::camera::CustomCameraPlugin;
+use plugins::particle_system::AwesomeParticlesPlugin;
 
 fn main() {
     App::new()
@@ -11,7 +12,7 @@ fn main() {
         color: Color::WHITE,
         brightness: 1.0 / 5.0f32,
     })
-    .add_plugins((DefaultPlugins, CustomCameraPlugin))
+    .add_plugins((DefaultPlugins, CustomCameraPlugin, AwesomeParticlesPlugin))
     .add_plugins(RapierPhysicsPlugin::<NoUserData>::default())
     .add_plugins(RapierDebugRenderPlugin::default())
     .add_systems(Startup,  setup)
@@ -27,10 +28,10 @@ fn setup(
         
     /* Create the ground. */
     commands
-        .spawn(Collider::cuboid(100.0, 0.1, 100.0))
+        .spawn(Collider::cuboid(50.0, 0.5, 50.0))
         .insert(TransformBundle::from(Transform::from_xyz(0.0, -2.0, 0.0)))
         .insert(MaterialMeshBundle {
-            mesh: meshes.add(shape::Plane::from_size(100.0).into()),
+            mesh: meshes.add(Cuboid::from_size(Vec3::new(100.0, 1.0, 100.0))),
             material: materials.add(StandardMaterial {
                 base_color: Color::ORANGE_RED,
                 perceptual_roughness: 1.0,
@@ -52,7 +53,7 @@ fn setup(
                 perceptual_roughness: 1.0,
                 ..default()
             }),
-            transform: Transform::from_xyz(0.0, 1.2, 0.0).with_rotation(Quat::from_rotation_y(-PI / 2.)).with_scale(Vec3::new(0.1, 0.1, 0.1)),
+            transform: Transform::from_xyz(0.0, 4.2, 0.0).with_rotation(Quat::from_rotation_y(-PI / 2.)).with_scale(Vec3::new(0.1, 0.1, 0.1)),
             ..default()
         });
 
