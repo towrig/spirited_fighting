@@ -1,2 +1,3 @@
 pub mod camera;
-pub mod particle_system;
+pub mod basic_particles;
+pub mod instancing;

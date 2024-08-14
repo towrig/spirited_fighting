@@ -4,7 +4,7 @@ use std::f32::consts::PI;
 
 mod plugins;
 use plugins::camera::CustomCameraPlugin;
-use plugins::particle_system::AwesomeParticlesPlugin;
+use plugins::basic_particles::BasicParticlesPlugin;
 
 fn main() {
     App::new()
@@ -12,9 +12,10 @@ fn main() {
         color: Color::WHITE,
         brightness: 1.0 / 5.0f32,
     })
-    .add_plugins((DefaultPlugins, CustomCameraPlugin, AwesomeParticlesPlugin))
+    .add_plugins((DefaultPlugins, CustomCameraPlugin))
     .add_plugins(RapierPhysicsPlugin::<NoUserData>::default())
     .add_plugins(RapierDebugRenderPlugin::default())
+    .add_plugins(BasicParticlesPlugin)
     .add_systems(Startup,  setup)
     .run();
 }
@@ -23,7 +24,7 @@ fn setup(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
-    asset_server: Res<AssetServer>,
+    //asset_server: Res<AssetServer>,
 ) {
         
     /* Create the ground. */
@@ -33,7 +34,7 @@ fn setup(
         .insert(MaterialMeshBundle {
             mesh: meshes.add(Cuboid::from_size(Vec3::new(100.0, 1.0, 100.0))),
             material: materials.add(StandardMaterial {
-                base_color: Color::ORANGE_RED,
+                base_color: Srgba::rgb(1.0, 0.0, 1.0).into(),
                 perceptual_roughness: 1.0,
                 ..default()
             }),
@@ -41,6 +42,7 @@ fn setup(
         });
 
     /* Create the bouncing man. */
+    /*
     commands
         .spawn(RigidBody::Dynamic)
         .insert(Collider::capsule_y(10.0f32, 2.0f32))
@@ -56,10 +58,11 @@ fn setup(
             transform: Transform::from_xyz(0.0, 4.2, 0.0).with_rotation(Quat::from_rotation_y(-PI / 2.)).with_scale(Vec3::new(0.1, 0.1, 0.1)),
             ..default()
         });
+    */
 
     // Ambient light
     commands.insert_resource(AmbientLight {
-        color: Color::GRAY * 0.2,
+        color: Srgba::rgb(0.9, 0.9, 0.9).into(),
         ..default()
     });
 

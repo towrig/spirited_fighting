@@ -15,5 +15,6 @@ opt-level = 1
 opt-level = 3
 
 [dependencies]
-bevy = "0.13.2"
-bevy_rapier3d = "0.25.0"
+bevy = "0.14.1"
+bevy_rapier3d = "0.27.0"
+bytemuck = "1.16.3"
