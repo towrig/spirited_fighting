@@ -1,4 +1,7 @@
-use bevy::prelude::*;
+use bevy::{
+    diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin},
+    prelude::*
+};
 use bevy_rapier3d::prelude::*;
 use std::f32::consts::PI;
 
@@ -12,7 +15,7 @@ fn main() {
         color: Color::WHITE,
         brightness: 1.0 / 5.0f32,
     })
-    .add_plugins((DefaultPlugins, CustomCameraPlugin))
+    .add_plugins((DefaultPlugins, CustomCameraPlugin, FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin::default()))
     .add_plugins(RapierPhysicsPlugin::<NoUserData>::default())
     .add_plugins(RapierDebugRenderPlugin::default())
     .add_plugins(BasicParticlesPlugin)
