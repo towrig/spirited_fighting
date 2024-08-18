@@ -1,6 +1,5 @@
 use bevy::prelude::*;
 use bevy_rapier3d::prelude::*;
-use std::f32::consts::PI;
 use bevy::render::view::NoFrustumCulling;
 
 use crate::plugins::instancing::{InstanceMaterialData, InstanceData, CustomMaterialPlugin};
@@ -11,8 +10,9 @@ pub struct BasicParticlesPlugin;
 impl Plugin for BasicParticlesPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins(CustomMaterialPlugin)
-            .add_systems(Startup, spawn_particles)
-            .add_systems(Update, update_particles);
+            .add_plugins(RapierDebugRenderPlugin::default())
+            .add_systems(Startup, spawn_particles);
+            //.add_systems(Update, update_particles);
     }
 }
 
@@ -22,6 +22,7 @@ fn spawn_particles(
     mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
     /*
+    //Pyhsical ball
     commands
     .spawn(RigidBody::Dynamic)
     .insert(Collider::ball(10.0f32))
@@ -39,6 +40,7 @@ fn spawn_particles(
     });
     */
 
+    //Visual particles
     commands.spawn((
         meshes.add(Cuboid::new(0.5, 0.5, 0.5)),
         SpatialBundle::INHERITED_IDENTITY,
@@ -58,7 +60,9 @@ fn spawn_particles(
 
 fn update_particles(
     mut commands: Commands,
+    //TODO: mut positions: Query<(Entity,&mut Transform, With<RigidBody>)>,
+    mut meshes: ResMut<Assets<Mesh>>,
 ) {
-
+   //TODO: update visual particles every frame
 }
 
